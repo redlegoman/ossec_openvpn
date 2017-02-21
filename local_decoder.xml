@@ -1,0 +1,25 @@
+<!-- Decode OpenVPN events -->
+<decoder name="openvpn">
+  <program_name>ovpn-server</program_name>
+</decoder>
+
+<decoder name="openvpn-login">
+  <parent>openvpn</parent>
+  <prematch>TLS: Username/Password authentication succeeded for username</prematch>
+  <regex offset="after_parent">^(\d+.\d+.\d+.\d+):\d+ TLS: Username/Password authentication succeeded for username '(\S+)'</regex>
+  <order>srcip,user</order>
+</decoder>
+
+<decoder name="openvpn-failed">
+  <parent>openvpn</parent>
+  <prematch>AUTH_FAILED</prematch>
+  <regex offset="after_parent">^(\d+.\d+.\d+.\d+):\d+ SENT CONTROL [(\S+)]</regex>
+  <order>srcip,user</order>
+</decoder>
+
+<decoder name="openvpn-test">
+  <parent>openvpn</parent>
+	<prematch>Bad encapsulated packet</prematch>
+  <regex offset="after_parent">(\d+.\d+.\d+.\d+):(\d+) (\w+): (\.*)</regex>
+  <order>srcip,url,action,extra_data</order>
+</decoder>
