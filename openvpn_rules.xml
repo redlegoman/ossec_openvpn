@@ -1,0 +1,42 @@
+<group name="openvpn">
+
+  <rule id="700500" level="0" noalert="1">
+     <decoded_as>openvpn</decoded_as>
+     <description>OpenVPN messages grouped.</description>
+  </rule>
+
+  <rule id="700501" level="11">
+     <if_sid>700500</if_sid>
+     <match>Bad</match>
+     <description>OpenVPN Bad things! Someone is connecting to the OpenVPN port but not properly</description>
+  </rule>
+	  <rule id="700502" level="4" >
+     <if_sid>700500</if_sid>
+     <regex>^alloweduser1/(\d+.\d+.\d+.\d+):\d+ Connection reset|^alloweduser2/(\d+.\d+.\d+.\d+):\d+ Connection reset</regex>
+     <description>OpenVPN disconnect (alloweduser1 or alloweduser2).</description>
+  </rule>
+  <rule id="700503" level="5">
+     <if_sid>700500</if_sid>
+     <match>Connection reset</match>
+     <description>OpenVPN Bad things! (POSSIBLY) Connection reset message with no user in string </description>
+  </rule>
+
+  <rule id="700504" level="4">
+     <if_sid>700500</if_sid>
+     			<regex>^alloweduser1/(\d+.\d+.\d+.\d+):\d+ SENT CONTROL|^alloweduser2/(\d+.\d+.\d+.\d+):\d+ SENT CONTROL</regex>
+     <description>OpenVPN : alloweduser1 (or alloweduser2) logged in...</description>
+  </rule>
+
+  <rule id="700505" level="4">
+     <if_sid>700500</if_sid>
+     <match>SENT CONTROL</match>
+     <description>OpenVPN : Someone logged in...</description>
+  </rule>
+
+
+	  <rule id="700506" level="4" >
+     <if_sid>700500</if_sid>
+     <match>authentication succeeded</match>
+     <description>OpenVPN authentication success.</description>
+  </rule>
+</group>
